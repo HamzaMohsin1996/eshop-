@@ -1,0 +1,277 @@
+import React from 'react';
+import {Link} from 'react-router';
+import {list,destroy,createCart} from '../services/product.services';
+import AddProduct from './AddProduct';
+
+class Product extends React.Component {
+	constructor(){
+		super();
+			this.state = {
+				products: [],
+				productId:'',
+				userId:13,
+				quantity:'',
+				purchased:true
+
+			};
+	    }
+	async componentWillMount(){
+	 	const product = await list();
+	 	this.setState ({
+	 		products: product
+	 	});
+	 }
+	async delEvent(id,index){
+	 	const product = this.state.products;
+	 	const del = await destroy(id);
+	 	window.confirm("Are you Sure?");
+	 	product.splice(index,1);
+	 	this.setState({
+	 		product:[]
+	 	});
+	 }
+	   change= (key,event) => {
+       this.setState({
+          [key]:event.target.value
+       });
+    }
+	  async cartEvent (productId){
+	  	var list ={
+	  		product_id:productId,
+	  		quantity:this.state.quantity,
+	  		user_id:this.state.userId,
+	  		purchased:this.state.purchased	
+	  	}
+	  	const product = await createCart(list);
+	   }
+
+  render() {
+  	const products = this.state.products;
+    return (
+     <div className="container-fluid">
+          <div className="row">
+	  {products.map((product,index) => {
+	        	return (
+			    <div className="col-lg-4 col-md-6 mb-4" key={product.id}>
+			      <div className="card text-center">	
+			        <img className="card-img-top" src={product.image} alt="Card image cap" height="200 px" />
+			        <div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Title:</strong>
+			            {product.title }</h5>
+			        </div>
+			        <div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Price:</strong>
+			            {product.price }Rs</h5>
+			        </div>
+			         <div className="card-body" id="card">
+			          <h5 className="card-title"><strong>Description:</strong>{product.description} </h5>
+			        </div>
+					<div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Quantity:</strong>
+			           <input name="quantity"
+			            type="number"
+				        required
+						value={this.state.quantity}
+						placeholder="quantity" 
+						onChange={(event) => this.change("quantity", event)}/>
+						   &nbsp;
+			           <button   className="btn btn-success" onClick={this.cartEvent.bind(this,product.id)} >Add to Cart</button>
+			           
+				     </h5>
+				    </div>	
+			        <div className="card-footer text-muted">
+			          <div className="row">
+			            <div className="col">
+			              <Link to={'/editproduct/' + product.id } activeClassName="active" className="btn btn-info" >Edit</Link>
+			            </div>
+			            <div className="col">
+			              <button className="btn btn-danger" data-confirm="Are you Sure?"  onClick={this.delEvent.bind(this,product.id,index)}>Delete</button>
+			           
+			            </div>
+
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+			  );
+	   })}	
+    </div>
+</div>
+    );
+  }
+}
+
+export default Product;
+
+
+
+
+
+
+
+
+
+
+  <Navbar>
+  <Navbar.Header>
+    <Navbar.Brand>
+      <a href="">Eshop</a>
+    </Navbar.Brand>
+  </Navbar.Header>
+   <Navbar.Collapse>
+  <Nav>
+    <NavItem eventKey={1} href="/home">
+      Home
+    </NavItem>
+    <NavDropdown eventKey={2} title="Product" id="basic-nav-dropdown">
+      <MenuItem eventKey={2.1} href="/product">Products</MenuItem>
+      <MenuItem eventKey={2.2} href="/addproduct">addproduct</MenuItem>
+      <MenuItem divider />
+    </NavDropdown>
+    <NavDropdown eventKey={3} title="Category" id="basic-nav-dropdown">
+      <MenuItem eventKey={3.1} href="/category">Category</MenuItem>
+      <MenuItem eventKey={3.2} href="/category">addCategory</MenuItem>
+      <MenuItem divider />
+    </NavDropdown>
+  </Nav>
+  <Nav pullRight>
+      <NavItem eventKey={1} href="/carts">
+        Cart
+      </NavItem>
+    </Nav>
+ </Navbar.Collapse>
+</Navbar> 
+
+
+
+
+
+
+
+
+
+
+
+			      <div className="card text-center">	
+			        <img className="card-img-top" src={product.image} alt="Card image cap" height="200 px" />
+			        <div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Title:</strong>
+			            {product.title }</h5>
+			        </div>
+			        <div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Price:</strong>
+			            {product.price }Rs</h5>
+			        </div>
+			         <div className="card-body" id="card">
+			          <h5 className="card-title"><strong>Description:</strong>{product.description} </h5>
+			        </div>
+					<div className="card-body" id="card">
+			          <h5 className="card-title">
+			            <strong>Quantity:</strong>
+			           <input name="quantity"
+			            type="number"
+				        required
+						value={this.state.quantity}
+						placeholder="quantity"
+						onChange={(event) => this.change("quantity", event)}/>
+						   &nbsp;
+			            <button   className="btn btn-success" onClick={this.cartEvent.bind(this,product.id)} >Add to Cart</button>
+				     </h5>
+				    </div>	
+			        <div className="card-footer text-muted">
+			          <div className="row">
+			            <div className="col">
+			            </div>
+			            <div className="col">
+			              <button className="btn btn-danger" data-confirm="Are you Sure?"  >Delete</button>
+			           
+			            </div>
+
+			          </div>
+			        </div>
+			      </div>
+			       <Col>
+        <Card style={{ width: "22rem" }}>
+          <CardImage
+            className="img-fluid"
+            src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg"
+            waves
+          />
+          <CardBody>
+            <CardTitle>Card title</CardTitle>
+            <CardText>
+              Some quick example text to build on the card title and make
+              up the bulk of the card&apos;s content.
+            </CardText>
+            <Button href="#">Button</Button>
+          </CardBody>
+        </Card>
+      </Col>
+			    </div>
+
+
+
+
+
+
+
+import React from 'react';
+import {Link} from 'react-router';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { withStyles } from '@material-ui/core/styles';
+import Menu from '@material-ui/icons/Menu';
+import PropTypes from 'prop-types';
+
+
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+};
+
+
+class Header extends React.Component{
+  render() {
+    const { classes } = this.props;
+    return (
+      <div>
+          <AppBar position="static" color="inherit">
+              <Toolbar>
+             
+                  <Typography variant="h6" color="inherit" href="/">
+                    Eshop
+                  </Typography>
+                  <Button color="inherit" href="/Product" id="btn" >Product</Button>
+                  <Button color="inherit" href="/category">Category</Button>
+                  <Button color="inherit" href="/addProduct">Add Product</Button>
+                  <Button color="inherit" href="/addCategory">Add Category</Button>
+                  <Button color="inherit" href="/carts">Cart</Button>
+              </Toolbar>
+          </AppBar>    
+      </div>
+    
+    );
+  }
+}
+
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+export default withStyles(styles)(Header);
